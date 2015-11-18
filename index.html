@@ -1,50 +1,31 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Handwriting Recognition by dalderJTI</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/dalderJTI/handwritingRecognition">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/dalderJTI/handwritingRecognition/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/dalderJTI/handwritingRecognition/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <section class="page-header">
+      <h1 class="project-name">Handwriting Recognition</h1>
+      <h2 class="project-tagline">Using Self Organizing Maps to Recognize Written Characters</h2>
+      <a href="https://github.com/dalderJTI/handwritingRecognition" class="btn">View on GitHub</a>
+      <a href="https://github.com/dalderJTI/handwritingRecognition/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/dalderJTI/handwritingRecognition/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>Handwriting Recognition</h1>
-          <p>Using Self Organizing Maps to Recognize Written Characters</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/dalderJTI">dalderJTI</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <h3>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h3>
+    <section class="main-content">
+      <h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
 <p>Handwriting recognition has many useful applications. It can be used as user input for devices, or to decode and interpret pictures of words into editable unicode text. In the application for this project, I am using it as a means of user input as a replacement for the keyboard on Android devices. </p>
 
-<h3>
-<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h3>
+<h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
 
 <p>Typing on a touchscreen isn't always the easiest. Without a physical keyboard, it is easy to hit the wrong keys or lose your hand position. On larger touch screens, when composing anything longer than a text, it may be more a fluid and easy process to write with a stylus rather than use a virtual keyboard. With the recent release of Google's Handwriting Input Engine, I became interested in how handwriting recognition works, and learns written characters based on user input. </p>
 
@@ -52,8 +33,8 @@
 
 <p>When writing on the screen, the keyboard takes the image of the written character and translates it to a bitmap image. The black pixels making up the character are used as the data points for the SOM to map to, as described below.</p>
 
-<h3>
-<a id="self-organizing-maps" class="anchor" href="#self-organizing-maps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Self Organizing Maps</h3>
+<h2>
+<a id="self-organizing-maps" class="anchor" href="#self-organizing-maps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Self Organizing Maps</h2>
 
 <p>(GIF or Video)
 Self Organizing Maps or SOMs, are a map of neurons that are thrown at a data plot. They employ competitive and unsupervised learning to predict the desired output. The competitive part means that the closest neuron to the data point on the plot is selected as the "winner" or Best Matching Unit (BMU). This neuron moves toward the data point, pulling its neighbors with it. This is repeated for however many iterations, and each time the map of neurons more closely resembles and represents the data points on the plot. A good step by step description of how they work, as defined below were found  <a href="http://www.ai-junkie.com/ann/som/som2.html">here</a>, along with more information about SOMs and how they work and are used. </p>
@@ -67,14 +48,19 @@ Self Organizing Maps or SOMs, are a map of neurons that are thrown at a data plo
 <li><p>Repeat step 2 for N iterations.</p></li>
 </ol>
 
-<h3>
-<a id="supervised-error-correction" class="anchor" href="#supervised-error-correction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supervised Error Correction</h3>
+<h2>
+<a id="supervised-error-correction" class="anchor" href="#supervised-error-correction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supervised Error Correction</h2>
 
 <p>While SOMs do a pretty good job at predicting the output you want, they could do a little better by providing it training examples to learn from while in the process of doing their regular work. What I am attempting to do is to collect the input characters from the user for a word, and matching the best guesses of what each character might be to any sequence of possible words in a dictionary. When a word is selected, any characters from the written sequence will be affirmed as correct and solidified as a guess, and any characters that were guessed wrong will be considered the training example that the neural network will learn from, to better guesses in the future. This basically describes the <a href="https://en.wikipedia.org/wiki/Viterbi_algorithm">Viterbi algorithm</a>, which is how I am going to accomplish this. </p>
-      </section>
 
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/dalderJTI/handwritingRecognition">Handwriting Recognition</a> is maintained by <a href="https://github.com/dalderJTI">dalderJTI</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
   </body>
 </html>
