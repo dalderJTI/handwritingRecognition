@@ -12,7 +12,7 @@ import me.sinu.thulika.entity.CharData;
 import me.sinu.thulika.entity.Engine;
 import me.sinu.thulika.entity.LanguageProcessor;
 import me.sinu.thulika.entity.LetterBuffer;
-import me.sinu.thulika.ocr.*;
+import me.sinu.thulika.ocr.Ocr;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,14 +35,15 @@ public class ThulikaIME extends InputMethodService{
 	private static final String PACKAGE_NAME = "me.sinu.thulika";
 	private static final String SETTINGS_ACTIVITY = "me.sinu.thulika.ThulikaActivity";
 	private static final String HELP_ACTIVITY = "me.sinu.thulika.HelpActivity";
-	private OpticalCharRecognizer opticalCharRecognizer;
+	private Ocr ocr;
+	//private Ocr numpad;
 	private View rootView;
 	private TextView stackView;
 	private LinearLayout movableView;
 	private TextView sliceView;
 	
-	private LanguageProcessor languageProcessor;
-	private LetterBuffer letterBuffer;
+	private LanguageProcessor langProc;
+	private LetterBuffer lBuffer;
 	private LinearLayout suggestionsViewGroup;
 	
 	boolean menuVisible;
@@ -51,7 +52,7 @@ public class ThulikaIME extends InputMethodService{
 	private final String stupidpenPrefs = "me.sinu.stupidpen";
 	private final String touchupDelayKey = "me.sinu.stupidpen.touchupDelay";
 	private final String defaultKeyboard = "me.sinu.stupidpen.defaultKeyboard";
-	private final String DEF_KB_VAL = "me.sinu.thulika.lang.EnglishProcessor";
+	private final String DEF_KB_VAL = "me.sinu.thulika.lang.MalayalamProcessor";
 	
 	private int controlViewMovePointCount;
 
@@ -133,38 +134,38 @@ public class ThulikaIME extends InputMethodService{
 	private void dotButtonAction() {
 		CharData dot = new CharData(".");
 		dot.setAlign(0);
-		opticalCharRecognizer.dumbProcess(dot);
+		ocr.dumbProcess(dot);
 	}
 	
 	private void spaceButtonAction() {
-		CharData space = new CharData(" ");
-		space.setAlign(0);
-		opticalCharRecognizer.dumbProcess(space);
+		CharData dot = new CharData(" ");
+		dot.setAlign(0);
+		ocr.dumbProcess(dot);
 	}
 	
 	private void enterButtonAction() {
-		CharData enter = new CharData("\n");
-		enter.setAlign(0);
-		opticalCharRecognizer.dumbProcess(enter);
+		CharData dot = new CharData("\n");
+		dot.setAlign(0);
+		ocr.dumbProcess(dot);
 	}
 	
-	private void deleteButtonAction() {
-		CharData delete = new CharData("");
-		delete.setAlign(0);
-		opticalCharRecognizer.dumbProcess(delete);
+	private void backspButtonAction() {
+		CharData dot = new CharData("");
+		dot.setAlign(0);
+		ocr.dumbProcess(dot);
 		getCurrentInputConnection().deleteSurroundingText(1, 0);
-		opticalCharRecognizer.showSliceText();
+		ocr.showSliceText();
 	}
 	
 	@Override
 	public View onCreateInputView() {
 		rootView = getLayoutInflater().inflate(R.layout.ime, null);
-		opticalCharRecognizer = (OpticalCharRecognizer) rootView.findViewById(R.id.writePad);
+		ocr = (Ocr) rootView.findViewById(R.id.writePad);
 		stackView = (TextView) rootView.findViewById(R.id.stackView);
 		suggestionsViewGroup = (LinearLayout) rootView.findViewById(R.id.suggestionsViewGroup);
 		sliceView = (TextView) rootView.findViewById(R.id.sliceView);
 		movableView = (LinearLayout) rootView.findViewById(R.id.movableView);
-		opticalCharRecognizer.setImeService(this);
+		ocr.setImeService(this);
 		
 		View showMenuButton = rootView.findViewById(R.id.showMenuButton);
 		menuView = (LinearLayout) rootView.findViewById(R.id.menuView);
@@ -281,7 +282,7 @@ public class ThulikaIME extends InputMethodService{
 		        case MotionEvent.ACTION_UP:
 		            if (mHandler == null) return true;
 		            mHandler.removeCallbacks(mAction);
-		            deleteButtonAction();
+		            backspButtonAction();
 		            mHandler = null;
 		            break;
 		        }
@@ -290,21 +291,22 @@ public class ThulikaIME extends InputMethodService{
 
 		    Runnable mAction = new Runnable() {
 		        @Override public void run() {
-		        	deleteButtonAction();
+		        	backspButtonAction();
 		            mHandler.postDelayed(this, 100);
 		        }
 		    };
 
 		});
+		///////////////////////////////////
 		
         showMenuButton.setOnTouchListener(new OnTouchListener() {
         	int _yDelta;
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				final int Y = rootView.getHeight() - (int) event.getRawY();
-				
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 		        case MotionEvent.ACTION_DOWN:
+		        	//hideMenu();
 		        	controlViewMovePointCount = 0;
 		            FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) menuControlView.getLayoutParams();
 		            _yDelta = Y - lParams.bottomMargin;
@@ -323,6 +325,7 @@ public class ThulikaIME extends InputMethodService{
 		        case MotionEvent.ACTION_POINTER_UP:
 		            break;
 		        case MotionEvent.ACTION_MOVE:
+		        	//hideMenu();
 		        	
 		        	controlViewMovePointCount++;
 		            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) menuControlView.getLayoutParams();
@@ -335,9 +338,12 @@ public class ThulikaIME extends InputMethodService{
 		    return true;
 			}
 		});
+		////////////////////////////////////
+		
 		
 		stackView.setOnTouchListener(new OnTouchListener() {
-			int _yDelta;			
+			int _yDelta;
+			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				final int Y = (int) event.getRawY();
@@ -363,8 +369,16 @@ public class ThulikaIME extends InputMethodService{
 		    return true;
 			}
 		});
+		/*ocr.loadEngine();
+		ocr.setInputConn(getCurrentInputConnection());*/
 		return rootView;
 	}
+	
+	/*@Override
+	public void onStartInput(EditorInfo attribute, boolean restarting) {
+		// TODO Auto-generated method stub
+		super.onStartInput(attribute, restarting);
+	}*/
 	
 	@Override
 	public void onFinishInput() {
@@ -390,15 +404,15 @@ public class ThulikaIME extends InputMethodService{
 		Class<LanguageProcessor> c = (Class<LanguageProcessor>) Class.forName(classname);
 		Constructor<LanguageProcessor> ct = c.getConstructor(Engine.class);
 		
-		languageProcessor = ct.newInstance(opticalCharRecognizer.getEngine());
-		letterBuffer = new LetterBuffer(languageProcessor);
-		opticalCharRecognizer.setInputConn(getCurrentInputConnection());
-		opticalCharRecognizer.loadEngine(languageProcessor, letterBuffer, stackView, suggestionsViewGroup, sliceView);
+		langProc = ct.newInstance(ocr.getEngine());//new MalayalamProcessor(ocr.getEngine());
+		lBuffer = new LetterBuffer(langProc);
+		ocr.setInputConn(getCurrentInputConnection());
+		ocr.loadEngine(langProc, lBuffer, stackView, suggestionsViewGroup, sliceView);
 	}
 	
 	private void setDelay() {
 		SharedPreferences prefs = getSharedPreferences(stupidpenPrefs, Context.MODE_PRIVATE);
-		opticalCharRecognizer.setDelay(prefs.getLong(touchupDelayKey, 100));
+		ocr.setDelay(prefs.getLong(touchupDelayKey, 100));
 	}
 	
 	@Override
@@ -410,4 +424,33 @@ public class ThulikaIME extends InputMethodService{
 	public void setExtractViewShown(boolean shown) {
 		super.setExtractViewShown(false);
 	}	
+	
+	/*
+	@Override
+	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
+			int newSelStart, int newSelEnd, int candidatesStart,
+			int candidatesEnd) {
+		// TODO Auto-generated method stub
+		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
+				candidatesStart, candidatesEnd);
+	}
+	
+	@Override
+	public void onDisplayCompletions(CompletionInfo[] completions) {
+		// TODO Auto-generated method stub
+		super.onDisplayCompletions(completions);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		return super.onKeyUp(keyCode, event);
+	}*/
+	
 }

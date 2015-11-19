@@ -15,6 +15,9 @@ import java.io.Serializable;
 
 public class ImageData implements Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 8117312467495671387L;
 	int[] pixels;
 	int width;
@@ -57,15 +60,15 @@ public class ImageData implements Serializable {
 	}
 	
 	public void save(String filename) throws IOException {
-		FileOutputStream fileOutputStream = new FileOutputStream(filename);
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-		objectOutputStream.writeObject(this);
+		FileOutputStream fout = new FileOutputStream(filename);
+		ObjectOutputStream oout = new ObjectOutputStream(fout);
+		oout.writeObject(this);
 	}
 	
 	public void restore(String filename) throws Exception {
-		FileInputStream fileInputStream = new FileInputStream(filename);
-		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-		Object obj = objectInputStream.readObject();
+		FileInputStream fin = new FileInputStream(filename);
+		ObjectInputStream oin = new ObjectInputStream(fin);
+		Object obj = oin.readObject();
 		ImageData image = (ImageData) obj;
 		pixels = image.getPixels();
 		width = image.getWidth();

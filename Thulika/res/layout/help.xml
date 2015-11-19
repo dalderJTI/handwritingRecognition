@@ -20,5 +20,6 @@
             android:src="@drawable/help_settings" />
 
     </LinearLayout>
+    
 
 </HorizontalScrollView>

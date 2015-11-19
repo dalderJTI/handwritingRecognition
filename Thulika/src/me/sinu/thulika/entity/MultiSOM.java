@@ -12,6 +12,9 @@ import org.encog.util.EngineArray;
 
 public class MultiSOM extends SOM{
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 5704311758898534270L;
 	
 	public MultiSOM(int inputNeuron, int outputNeuron) {
@@ -19,7 +22,7 @@ public class MultiSOM extends SOM{
 	}
 
 	public int[] matches(final MLData input, final int count)  {
-		int[] returnArray = new int[count]; 
+		int[] retArray = new int[count]; 
 		double[] res = new double[count];
 		if (input.size() > getInputCount()) {
 			throw new NeuralNetworkError(
@@ -33,7 +36,7 @@ public class MultiSOM extends SOM{
 		
 		for(int i=0; i<count; i++) {
 			res[i] = Double.POSITIVE_INFINITY;
-			returnArray[i] = -1;
+			retArray[i] = -1;
 		}
 		
 		//int result = -1;
@@ -49,11 +52,11 @@ public class MultiSOM extends SOM{
 				if(dist < res[k]) {
 					for(int j=count-1; j>k; j--) {
 						res[j] = res[j-1];
-						returnArray[j] = returnArray[j-1];
+						retArray[j] = retArray[j-1];
 					}
 					
 					res[k] = dist;
-					returnArray[k] = i;
+					retArray[k] = i;
 					break;
 				}
 			}
@@ -61,6 +64,6 @@ public class MultiSOM extends SOM{
 		}
 
 		//return result;
-		return returnArray;
+		return retArray;
 	}
 }

@@ -101,6 +101,16 @@ public class SingleTouchEventView extends View {
 		int[] pixels = new int[bitmap.getWidth()*bitmap.getHeight()];
 		bitmap.getPixels(pixels, 0, this.getWidth(), 0, 0, this.getWidth(), this.getHeight());
 		return pixels;
+		/*for(int i=0;i<this.getHeight(); i++) {
+			String str="";
+			for(int j=0; j<this.getWidth(); j++) {
+				str = str+pixels[(i*this.getWidth())+j];
+			}
+			Log.i(TAG, str);
+			
+		}*/
+		// compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(new
+		// File("D:/tt.jpg")));
 	}
 	
 	public void clear() {

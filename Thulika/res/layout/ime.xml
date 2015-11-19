@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="0.48" >
 
-    <me.sinu.thulika.ocr.OpticalCharRecognizer
+    <me.sinu.thulika.ocr.Ocr
         android:id="@+id/writePad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical" >
-
     </LinearLayout>
 
     <LinearLayout
@@ -102,9 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    tools:ignore="Orientation" >
-                </LinearLayout>
-                
+                    android:orientation="vertical" />
             </HorizontalScrollView>
 
             <TextView
@@ -116,9 +111,7 @@
                 android:alpha="0.8"
                 android:minWidth="80dip"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-            
         </LinearLayout>
-        
     </LinearLayout>
 
 </FrameLayout>

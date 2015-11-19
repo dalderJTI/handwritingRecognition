@@ -54,11 +54,11 @@ public class ThulikaActivity extends Activity {
 			public void onStartTrackingTouch(SeekBar seekBar) {}
 			
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
 				delayView.setText(String.valueOf(progress*50));		
 				prefs.edit().putLong(touchupDelayKey, progress*50).commit();
 			}
-			
 		});
     	
     	feedbackButton.setOnClickListener(new OnClickListener() {
@@ -86,6 +86,5 @@ public class ThulikaActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-    	android.os.Debug.waitForDebugger();
     }
 }

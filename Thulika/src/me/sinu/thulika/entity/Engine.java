@@ -14,22 +14,25 @@ import java.io.Serializable;
 
 public class Engine implements Serializable{
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -6328105763027753353L;
-	private MultiSOM neuralNetwork;
+	private MultiSOM net;
 	private CharData[] neuronMap;
 	private int sampleDataWidth;
 	private int sampleDataHeight;
-	private String languageId;
+	private String langId;
 	
 	public MultiSOM getNet() {
-		return neuralNetwork;
+		return net;
 	}
 	public CharData[] getNeuronMap() {
 		return neuronMap;
 	}
 	
 	public void setNet(MultiSOM net) {
-		this.neuralNetwork = net;
+		this.net = net;
 	}
 	public void setNeuronMap(CharData[] neuronMap) {
 		this.neuronMap = neuronMap;
@@ -47,10 +50,10 @@ public class Engine implements Serializable{
 		this.sampleDataHeight = sampleDataHeight;
 	}
 	public String getLangId() {
-		return languageId;
+		return langId;
 	}
 	public void setLangId(String langId) {
-		this.languageId = langId;
+		this.langId = langId;
 	}
 	public void save(String filename) throws IOException {
 		FileOutputStream fout = new FileOutputStream(filename);
@@ -62,11 +65,11 @@ public class Engine implements Serializable{
 		ObjectInputStream oin = new ObjectInputStream(fstream);
 		Object obj = oin.readObject();
 		Engine en = (Engine) obj;
-		neuralNetwork = en.getNet();
+		net = en.getNet();
 		neuronMap = en.getNeuronMap();
 		sampleDataWidth = en.getSampleDataWidth();
 		sampleDataHeight = en.getSampleDataHeight();
-		languageId = en.getLangId();
+		langId = en.getLangId();
 	}
 	
 }
