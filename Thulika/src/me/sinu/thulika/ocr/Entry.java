@@ -49,7 +49,7 @@ public class Entry {
 	}
 		
 	public void downsample(final int[] pix) {
-		pixels = pix;//new int[width*height];
+		pixels = pix;
 		findBounds(width, height);
 		this.ratioX = (double) (this.downSampleRight - this.downSampleLeft)
 				/ (double) sampleData.getWidth();

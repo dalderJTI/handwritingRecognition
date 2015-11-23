@@ -102,11 +102,6 @@ public class SampleData implements Comparable<SampleData>, Cloneable {
 	public int compareTo(final SampleData o) {
 		final SampleData obj = o;
 		return getLetter().compareTo(obj.getLetter());
-		/*if (getLetter() > obj.getLetter()) {
-			return 1;
-		} else {
-			return -1;
-		}*/
 	}
 
 	/**

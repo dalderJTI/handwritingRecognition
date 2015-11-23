@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Ocr extends SingleTouchEventView{
+public class OpticalCharacterRecognizer extends SingleTouchEventView{
 
 	private static int DOWNSAMPLE_HEIGHT = 50;
 	private static int DOWNSAMPLE_WIDTH = 50;
@@ -53,7 +53,6 @@ public class Ocr extends SingleTouchEventView{
 	 * The neural network.
 	 */
 	private MultiSOM net;
-	//private SOM net;
 	
 	private int lettersToDelete=0;
 
@@ -70,18 +69,8 @@ public class Ocr extends SingleTouchEventView{
 		this.imeService = imeService;
 	}
 	
-	public Ocr(Context context, AttributeSet attrs) {
+	public OpticalCharacterRecognizer(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		/*externalDir = "/mnt/sdcard/Android/data/me.sinu.thulika.train/files";
-		engineDir = externalDir.endsWith("/")? externalDir : externalDir+"/";
-		engineDir = engineDir + ENGINEDIR;
-		File eDir = new File(engineDir);
-		if(!eDir.isDirectory()) {
-			eDir.mkdir();
-		}
-		if(!eDir.isDirectory()) {
-			Log.e(TAG, "Directory doesnt exist : " + engineDir);
-		}*/
 	}	
 	
 	public void init() {
@@ -102,16 +91,13 @@ public class Ocr extends SingleTouchEventView{
 			this.engine = en;
 			this.net = en.getNet();
 			this.neuronMap = en.getNeuronMap();
-			Ocr.DOWNSAMPLE_WIDTH = en.getSampleDataWidth();
-			Ocr.DOWNSAMPLE_HEIGHT = en.getSampleDataHeight();
+			OpticalCharacterRecognizer.DOWNSAMPLE_WIDTH = en.getSampleDataWidth();
+			OpticalCharacterRecognizer.DOWNSAMPLE_HEIGHT = en.getSampleDataHeight();
 			
 			SampleData sampleData = new SampleData("?", DOWNSAMPLE_WIDTH, DOWNSAMPLE_HEIGHT);
-			/*if(entry==null) {
-				entry = new Entry(this.getWidth(), this.getHeight());
-			}*/
+
 			entry.setSampleData(sampleData);
 			
-			//init();
 			Toast msg = Toast.makeText(getContext(),"Keyboard:" + langProc.getEngineName(), Toast.LENGTH_SHORT);
 			msg.show();
 		} catch (Exception e) {
@@ -133,7 +119,6 @@ public class Ocr extends SingleTouchEventView{
 	 */
 	public CharData[] recognizeAction(int count) {
 		if (this.net == null) {
-			//Log.e(TAG, "I need to be trained first!");
 			return null;
 		}
 		if(count>this.engine.getNeuronMap().length) {
@@ -144,7 +129,7 @@ public class Ocr extends SingleTouchEventView{
 		}
 		this.entry.downsample(getImagePixels());
 
-		final MLData input = new BasicMLData(Ocr.DOWNSAMPLE_HEIGHT * Ocr.DOWNSAMPLE_WIDTH);
+		final MLData input = new BasicMLData(OpticalCharacterRecognizer.DOWNSAMPLE_HEIGHT * OpticalCharacterRecognizer.DOWNSAMPLE_WIDTH);
 		int idx = 0;
 		final SampleData ds = this.entry.getSampleData();
 		for (int y = 0; y < ds.getHeight(); y++) {
@@ -154,11 +139,7 @@ public class Ocr extends SingleTouchEventView{
 		}
 
 		final int[] result = this.net.matches(input, count); 
-		//CharData[] ret = new CharData[count];
-		//for(int i=0; i<count; i++) {
-				//ret[i] = neuronMap[result[i]];
-		//}
-		
+
 		List<CharData> retList = new ArrayList<CharData>();
 		for(int i=0; i<count; i++) {
 			CharData newData = neuronMap[result[i]];
@@ -169,7 +150,6 @@ public class Ocr extends SingleTouchEventView{
 		CharData[] ret = retList.toArray(new CharData[]{});
 		
 		clearAction();
-		//return neuronMap[best];
 		return ret;
 	}
 	
@@ -200,14 +180,11 @@ public class Ocr extends SingleTouchEventView{
 		inputConn.deleteSurroundingText(lettersToDelete, 0);
 		
 		showCandidates();
-		/*if(result==null) {
-			return;
-		}*/
+
 		putText(previous, result);
 		lettersToDelete = cData[0].getSymbol().length();
 		inputConn.commitText(cData[0].getSymbol(), 1);
 		showSliceText();
-		//return true;
 	}
 
 	private void clearAction() {
@@ -250,8 +227,8 @@ public class Ocr extends SingleTouchEventView{
 		stackView.setText(langProc.getStack());
 		suggestionsViewGroup.removeAllViews();
 		if(!lBuffer.isEmpty()) {
-			/*List<CharData>*/CharData[] suggestions = lBuffer.getSuggestions();
-			if(suggestions!=null /*&& !suggestions.isEmpty()*/) {
+			CharData[] suggestions = lBuffer.getSuggestions();
+			if(suggestions!=null) {
 				Context ctx = this.getContext();
 				
 				CharSequence pre = inputConn.getTextBeforeCursor(1, 0);
@@ -293,17 +270,7 @@ public class Ocr extends SingleTouchEventView{
 					suggestView.setOnClickListener(new OnClickListener() {
 		    			public void onClick(View v) {
 		    				String[] result = lBuffer.replace(suggestion);
-		    				
-		    				/*int pos = inputBox.getSelectionStart();
-							String previous;
-							try {
-								previous = "" + (char)inputBox.getText().toString().codePointBefore(pos);
-							} catch (Exception e) {
-								previous = null;
-							}
-		    				
-		    				putText(pos, previous, result);*/
-		    				
+	
 		    				inputConn.deleteSurroundingText(lettersToDelete, 0);
 		    				lettersToDelete = 0;
 		    				putText(previous, result);
@@ -316,7 +283,6 @@ public class Ocr extends SingleTouchEventView{
 				}
 			}
 		}
-		//suggestionsViewGroup.invalidate();
 		((HorizontalScrollView)suggestionsViewGroup.getParent()).scrollTo(0, 0);	
 	}
 	
@@ -330,11 +296,9 @@ public class Ocr extends SingleTouchEventView{
 			finStr =finStr + result[i];
 		}
 		if(result.length>1 && previous!=null) {
-			//inputBox.getText().replace(pos-1, pos, finStr);
 			inputConn.deleteSurroundingText(1, 0);
 			inputConn.commitText(finStr, 1);
 		} else {
-			//inputBox.getText().insert(pos, finStr);
 			inputConn.commitText(finStr, 1);
 		}
 		

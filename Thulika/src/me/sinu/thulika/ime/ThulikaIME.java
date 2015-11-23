@@ -12,7 +12,7 @@ import me.sinu.thulika.entity.CharData;
 import me.sinu.thulika.entity.Engine;
 import me.sinu.thulika.entity.LanguageProcessor;
 import me.sinu.thulika.entity.LetterBuffer;
-import me.sinu.thulika.ocr.Ocr;
+import me.sinu.thulika.ocr.OpticalCharacterRecognizer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +35,7 @@ public class ThulikaIME extends InputMethodService{
 	private static final String PACKAGE_NAME = "me.sinu.thulika";
 	private static final String SETTINGS_ACTIVITY = "me.sinu.thulika.ThulikaActivity";
 	private static final String HELP_ACTIVITY = "me.sinu.thulika.HelpActivity";
-	private Ocr ocr;
+	private OpticalCharacterRecognizer ocr;
 	//private Ocr numpad;
 	private View rootView;
 	private TextView stackView;
@@ -160,7 +160,7 @@ public class ThulikaIME extends InputMethodService{
 	@Override
 	public View onCreateInputView() {
 		rootView = getLayoutInflater().inflate(R.layout.ime, null);
-		ocr = (Ocr) rootView.findViewById(R.id.writePad);
+		ocr = (OpticalCharacterRecognizer) rootView.findViewById(R.id.writePad);
 		stackView = (TextView) rootView.findViewById(R.id.stackView);
 		suggestionsViewGroup = (LinearLayout) rootView.findViewById(R.id.suggestionsViewGroup);
 		sliceView = (TextView) rootView.findViewById(R.id.sliceView);
