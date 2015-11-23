@@ -41,13 +41,6 @@ public class LetterBuffer {
 		if(letter == null) {
 			return null;
 		}
-		/*List<CharData> alter = letter.getAlternatives();
-		if(alter==null) {
-			alter = new ArrayList<CharData>(1);
-		}
-		ArrayList<CharData> ret = new ArrayList<CharData>(alter);
-		ret.add(0, letter);
-		return ret;*/
 		return this.alter;
 	}
 	

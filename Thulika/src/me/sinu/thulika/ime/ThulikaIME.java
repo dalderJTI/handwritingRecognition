@@ -36,7 +36,6 @@ public class ThulikaIME extends InputMethodService{
 	private static final String SETTINGS_ACTIVITY = "me.sinu.thulika.ThulikaActivity";
 	private static final String HELP_ACTIVITY = "me.sinu.thulika.HelpActivity";
 	private OpticalCharacterRecognizer ocr;
-	//private Ocr numpad;
 	private View rootView;
 	private TextView stackView;
 	private LinearLayout movableView;
@@ -52,7 +51,7 @@ public class ThulikaIME extends InputMethodService{
 	private final String stupidpenPrefs = "me.sinu.stupidpen";
 	private final String touchupDelayKey = "me.sinu.stupidpen.touchupDelay";
 	private final String defaultKeyboard = "me.sinu.stupidpen.defaultKeyboard";
-	private final String DEF_KB_VAL = "me.sinu.thulika.lang.MalayalamProcessor";
+	private final String DEF_KB_VAL = "me.sinu.thulika.lang.EnglishProcessor";
 	
 	private int controlViewMovePointCount;
 
@@ -82,10 +81,9 @@ public class ThulikaIME extends InputMethodService{
 		TextView[] items = new TextView[] {
 								makeMenuItem("Help", null),
 								makeMenuItem("Settings", null),
-								makeMenuItem("Malayalam", "me.sinu.thulika.lang.MalayalamProcessor"),
-								makeMenuItem("English (beta)", "me.sinu.thulika.lang.EnglishProcessor"),
+								makeMenuItem("English", "me.sinu.thulika.lang.EnglishProcessor"),
 								makeMenuItem("Numeric", "me.sinu.thulika.lang.NumberProcessor"),
-								makeMenuItem("Symbols (beta)", "me.sinu.thulika.lang.SymbolProcessor")};
+								makeMenuItem("Symbols", "me.sinu.thulika.lang.SymbolProcessor")};
 		
 		for(TextView item : items) {
 			menuView.addView(item);
@@ -325,7 +323,6 @@ public class ThulikaIME extends InputMethodService{
 		        case MotionEvent.ACTION_POINTER_UP:
 		            break;
 		        case MotionEvent.ACTION_MOVE:
-		        	//hideMenu();
 		        	
 		        	controlViewMovePointCount++;
 		            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) menuControlView.getLayoutParams();
@@ -369,17 +366,9 @@ public class ThulikaIME extends InputMethodService{
 		    return true;
 			}
 		});
-		/*ocr.loadEngine();
-		ocr.setInputConn(getCurrentInputConnection());*/
 		return rootView;
 	}
-	
-	/*@Override
-	public void onStartInput(EditorInfo attribute, boolean restarting) {
-		// TODO Auto-generated method stub
-		super.onStartInput(attribute, restarting);
-	}*/
-	
+
 	@Override
 	public void onFinishInput() {
 		super.onFinishInput();
@@ -404,7 +393,7 @@ public class ThulikaIME extends InputMethodService{
 		Class<LanguageProcessor> c = (Class<LanguageProcessor>) Class.forName(classname);
 		Constructor<LanguageProcessor> ct = c.getConstructor(Engine.class);
 		
-		langProc = ct.newInstance(ocr.getEngine());//new MalayalamProcessor(ocr.getEngine());
+		langProc = ct.newInstance(ocr.getEngine());
 		lBuffer = new LetterBuffer(langProc);
 		ocr.setInputConn(getCurrentInputConnection());
 		ocr.loadEngine(langProc, lBuffer, stackView, suggestionsViewGroup, sliceView);
