@@ -35,14 +35,14 @@ public class ThulikaIME extends InputMethodService{
 	private static final String PACKAGE_NAME = "me.sinu.thulika";
 	private static final String SETTINGS_ACTIVITY = "me.sinu.thulika.ThulikaActivity";
 	private static final String HELP_ACTIVITY = "me.sinu.thulika.HelpActivity";
-	private OpticalCharacterRecognizer ocr;
+	private OpticalCharacterRecognizer opticalCharacterRecognizer;
 	private View rootView;
 	private TextView stackView;
 	private LinearLayout movableView;
 	private TextView sliceView;
 	
-	private LanguageProcessor langProc;
-	private LetterBuffer lBuffer;
+	private LanguageProcessor languageProc;
+	private LetterBuffer letterBuffer;
 	private LinearLayout suggestionsViewGroup;
 	
 	boolean menuVisible;
@@ -132,38 +132,38 @@ public class ThulikaIME extends InputMethodService{
 	private void dotButtonAction() {
 		CharData dot = new CharData(".");
 		dot.setAlign(0);
-		ocr.dumbProcess(dot);
+		opticalCharacterRecognizer.dumbProcess(dot);
 	}
 	
 	private void spaceButtonAction() {
 		CharData dot = new CharData(" ");
 		dot.setAlign(0);
-		ocr.dumbProcess(dot);
+		opticalCharacterRecognizer.dumbProcess(dot);
 	}
 	
 	private void enterButtonAction() {
 		CharData dot = new CharData("\n");
 		dot.setAlign(0);
-		ocr.dumbProcess(dot);
+		opticalCharacterRecognizer.dumbProcess(dot);
 	}
 	
 	private void backspButtonAction() {
 		CharData dot = new CharData("");
 		dot.setAlign(0);
-		ocr.dumbProcess(dot);
+		opticalCharacterRecognizer.dumbProcess(dot);
 		getCurrentInputConnection().deleteSurroundingText(1, 0);
-		ocr.showSliceText();
+		opticalCharacterRecognizer.showSliceText();
 	}
 	
 	@Override
 	public View onCreateInputView() {
 		rootView = getLayoutInflater().inflate(R.layout.ime, null);
-		ocr = (OpticalCharacterRecognizer) rootView.findViewById(R.id.writePad);
+		opticalCharacterRecognizer = (OpticalCharacterRecognizer) rootView.findViewById(R.id.writePad);
 		stackView = (TextView) rootView.findViewById(R.id.stackView);
 		suggestionsViewGroup = (LinearLayout) rootView.findViewById(R.id.suggestionsViewGroup);
 		sliceView = (TextView) rootView.findViewById(R.id.sliceView);
 		movableView = (LinearLayout) rootView.findViewById(R.id.movableView);
-		ocr.setImeService(this);
+		opticalCharacterRecognizer.setImeService(this);
 		
 		View showMenuButton = rootView.findViewById(R.id.showMenuButton);
 		menuView = (LinearLayout) rootView.findViewById(R.id.menuView);
@@ -393,15 +393,15 @@ public class ThulikaIME extends InputMethodService{
 		Class<LanguageProcessor> c = (Class<LanguageProcessor>) Class.forName(classname);
 		Constructor<LanguageProcessor> ct = c.getConstructor(Engine.class);
 		
-		langProc = ct.newInstance(ocr.getEngine());
-		lBuffer = new LetterBuffer(langProc);
-		ocr.setInputConn(getCurrentInputConnection());
-		ocr.loadEngine(langProc, lBuffer, stackView, suggestionsViewGroup, sliceView);
+		languageProc = ct.newInstance(opticalCharacterRecognizer.getEngine());
+		letterBuffer = new LetterBuffer(languageProc);
+		opticalCharacterRecognizer.setInputConn(getCurrentInputConnection());
+		opticalCharacterRecognizer.loadEngine(languageProc, letterBuffer, stackView, suggestionsViewGroup, sliceView);
 	}
 	
 	private void setDelay() {
 		SharedPreferences prefs = getSharedPreferences(stupidpenPrefs, Context.MODE_PRIVATE);
-		ocr.setDelay(prefs.getLong(touchupDelayKey, 100));
+		opticalCharacterRecognizer.setDelay(prefs.getLong(touchupDelayKey, 100));
 	}
 	
 	@Override

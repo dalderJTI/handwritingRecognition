@@ -52,7 +52,7 @@ public class SingleTouchEventView extends View {
 		paint.setStrokeJoin(Paint.Join.ROUND);
 		
 		SharedPreferences prefs = this.getContext().getSharedPreferences(stupidpenPrefs, Context.MODE_PRIVATE);
-		delay = prefs.getLong(touchupDelayKey, 100);
+		delay = 100; //prefs.getLong(touchupDelayKey, 100);
 	}
 
 	@Override
