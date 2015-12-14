@@ -29,16 +29,11 @@
 <h2>
 <a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
 
-<p>Typing on a touchscreen isn't always the easiest. Without a physical keyboard, it is easy to hit the wrong keys or lose your hand position. On larger touch screens, when composing anything longer than a text, it may be more a fluid and easy process to write with a stylus rather than use a virtual keyboard. With the recent release of Google's Handwriting Input Engine, I became interested in how handwriting recognition works, and learns written characters based on user input. </p>
+<p>Typing on a touchscreen isn't always the easiest. Without a physical keyboard, it is easy to hit the wrong keys or lose your hand position. On larger touch screens, when composing anything longer than a text, it may be more a fluid and easy process to write with a stylus rather than use a virtual keyboard. With the recent release of Google's Handwriting Input Engine, I became interested in how handwriting recognition works and learns written characters based on user input. </p>
 
-<p>I found a project on GitHub called <a href="https://github.com/sinujohn/ThulikaIME">Thulika</a> that I forked and began to learn in order to develop on. This application is developed for the Android devices and uses the touch screen as the writing surface for the input method. It uses a neural network library named <a href="https://github.com/encog">Encog</a> which implements many different types and aspects of neural networks. The neural network chosen for this application was a Self Organizing Map. My goal for this project is to implement a supervised means of error correction in order to help the keyboard recognize written characters in a faster manner than previously.</p>
+<p>I found a project on GitHub called <a href="https://github.com/sinujohn/ThulikaIME">Thulika</a> that I forked and began to learn in order to develop on. This application is developed for the Android devices and uses the touch screen as the writing surface for the input method. It uses a neural network library named <a href="https://github.com/encog">Encog</a> which implements many different types and aspects of neural networks. The neural network chosen for this application was a Self Organizing Map. My goal for this project is to implement a supervised means of error correction in order to help the keyboard recognize written characters and learn from its mistakes as it produces words as output instead of single characters.</p>
 
-<p>When writing on the screen, the keyboard takes the image of the written character and translates it to a bitmap image. The black pixels making up the character are used as the data points for the SOM to map to, as described below.</p>
-
-<h2>
-<a id="other-applications" class="anchor" href="#other-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other Applications</h2>
-
-<p>Aside from being used as an input method, which may productively replace the virtual keyboard in certain instances, the application on recognizing text from images has many other applications. With the right processing on images containing text, this application also has the potential to recognize that text and use it for whatever reason you can think of with a little more development. </p>
+<p>When writing on the screen, the keyboard takes the image of the written character and translates it to a bitmap image. The black pixels making up the character are used as the data points (a matrix of boolean values) for the SOM to map to, as described below. </p>
 
 <h2>
 <a id="self-organizing-maps" class="anchor" href="#self-organizing-maps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Self Organizing Maps</h2>
@@ -63,7 +58,7 @@
 
 <p>SOMs themselves do a pretty good job at recognizing characters. Wouldn't it be better if instead of choosing or confirming each individual character after writing it, we could instead save the input upon completion and have the application choose a word that best matches it for us? Using the <a href="https://en.wikipedia.org/wiki/Viterbi_algorithm">Viterbi algorithm</a>, this is possible. </p>
 
-<p>After each input character, the application returns a list of it's best guesses of what that input might be by using the SOM. This application will save that array and use it later. </p>
+<p>After each input character, the application returns a list of its best guesses of what that input might be by using the SOM. This application will save that array and use it later. </p>
 
 <p><img src="https://raw.githubusercontent.com/dalderJTI/handwritingRecognition/develop/Thulika/ExampleImages/LetterPredictions.png" alt="Letter Prediction"></p>
 
@@ -77,7 +72,12 @@
 
 <p>We then combine the scores for each letter in any confirmed matching word sequences and output them as a list to select from, sorted by score.</p>
 
-<p>When a word is selected, we are provided with a possible training example. For our example, the letter sequence of our selected word should match the letters across the tops of the prediction arrays. By passing the data mapping of the input and the confirmed letter it represents back to the SOM, we can provide it the information it needs to adjust it's future predictions. This is called supervised learning. </p>
+<p>When a word is selected, we are provided with a possible training example. For our example, the letter sequence of our selected word should match the letters across the tops of the prediction arrays. By passing the data mapping of the input and the confirmed letter it represents back to the SOM, we can provide it the information it needs to adjust its future predictions. This is called supervised learning. </p>
+
+<h2>
+<a id="other-applications" class="anchor" href="#other-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other Applications</h2>
+
+<p>Aside from being used as an input method which may productively replace the virtual keyboard in certain instances, the problem of recognizing text from images has many other applications. With the right processing performed on an image, the brains of this application also has the potential to recognize any text contained within and use it for whatever reason you can think of.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/dalderJTI/handwritingRecognition">Character Recognition and Its Uses as Input</a> is maintained by <a href="https://github.com/dalderJTI">dalderJTI</a>.</span>
