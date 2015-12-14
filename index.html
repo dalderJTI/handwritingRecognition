@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Optical Character Recognition as an Input Method by dalderJTI</title>
+    <title>Character Recognition and Its Uses as Input by dalderJTI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Optical Character Recognition as an Input Method</h1>
+      <h1 class="project-name">Character Recognition and Its Uses as Input</h1>
       <h2 class="project-tagline">Applying Machine Learning to Recognize and Train on Written Characters</h2>
       <a href="https://github.com/dalderJTI/handwritingRecognition" class="btn">View on GitHub</a>
       <a href="https://github.com/dalderJTI/handwritingRecognition/zipball/master" class="btn">Download .zip</a>
@@ -24,16 +24,21 @@
 <h2>
 <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
-<p>Handwriting recognition has many useful applications. It can be used as user input for devices, or to decode and interpret pictures of words into editable unicode text. In the application for this project, I am using it as a means of user input as a replacement for the keyboard on Android devices. </p>
+<p>Character recognition has many useful applications. It can be used as user input for devices, or to decode and interpret pictures of words into editable unicode text. In the application for this project, I am using it as a means of user input for the keyboard on Android devices. For this project I have delved into studying concepts that have already been applied and that I would like to apply to improve the functionality of this input method. </p>
 
 <h2>
 <a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
 
 <p>Typing on a touchscreen isn't always the easiest. Without a physical keyboard, it is easy to hit the wrong keys or lose your hand position. On larger touch screens, when composing anything longer than a text, it may be more a fluid and easy process to write with a stylus rather than use a virtual keyboard. With the recent release of Google's Handwriting Input Engine, I became interested in how handwriting recognition works, and learns written characters based on user input. </p>
 
-<p>I found a project on GitHub called Thulika that I forked and began to learn in order to develop on. This application is developed for the Android devices and uses the touch screen as the writing surface for the input method. It uses a neural network library named Encog which implements many different types and aspects of neural networks. The nueral network chosen for this application was a Self Organizing Map. My goal for this project is to implement a supervised means of error correction in order to help the keyboard recognize written characters in a faster manner than previously.</p>
+<p>I found a project on GitHub called <a href="https://github.com/sinujohn/ThulikaIME">Thulika</a> that I forked and began to learn in order to develop on. This application is developed for the Android devices and uses the touch screen as the writing surface for the input method. It uses a neural network library named <a href="https://github.com/encog">Encog</a> which implements many different types and aspects of neural networks. The neural network chosen for this application was a Self Organizing Map. My goal for this project is to implement a supervised means of error correction in order to help the keyboard recognize written characters in a faster manner than previously.</p>
 
 <p>When writing on the screen, the keyboard takes the image of the written character and translates it to a bitmap image. The black pixels making up the character are used as the data points for the SOM to map to, as described below.</p>
+
+<h2>
+<a id="other-applications" class="anchor" href="#other-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other Applications</h2>
+
+<p>Aside from being used as an input method, which may productively replace the virtual keyboard in certain instances, the application on recognizing text from images has many other applications. With the right processing on images containing text, this application also has the potential to recognize that text and use it for whatever reason you can think of with a little more development. </p>
 
 <h2>
 <a id="self-organizing-maps" class="anchor" href="#self-organizing-maps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Self Organizing Maps</h2>
@@ -48,8 +53,8 @@
 <li><p>Each node's weights are initialized.</p></li>
 <li><p>A vector is chosen at random from the set of training data and presented to the lattice.</p></li>
 <li><p>Every node is examined to calculate which one's weights are most like the input vector. The winning node is commonly known as the Best Matching Unit (BMU).</p></li>
-<li><p>The radius of the neighbourhood of the BMU is now calculated. This is a value that starts large, typically set to the 'radius' of the lattice,  but diminishes each time-step. Any nodes found within this radius are deemed to be inside the BMU's neighbourhood.</p></li>
-<li><p>Each neighbouring node's (the nodes found in step 4) weights are adjusted to make them more like the input vector. The closer a node is to the BMU, the more its weights get altered.</p></li>
+<li><p>The radius of the neighborhood of the BMU is now calculated. This is a value that starts large, typically set to the 'radius' of the lattice,  but diminishes each time-step. Any nodes found within this radius are deemed to be inside the BMU's neighborhood.</p></li>
+<li><p>Each neighboring node's (the nodes found in step 4) weights are adjusted to make them more like the input vector. The closer a node is to the BMU, the more its weights get altered.</p></li>
 <li><p>Repeat step 2 for N iterations.</p></li>
 </ol>
 
@@ -62,7 +67,7 @@
 
 <p><img src="https://raw.githubusercontent.com/dalderJTI/handwritingRecognition/develop/Thulika/ExampleImages/LetterPredictions.png" alt="Letter Prediction"></p>
 
-<p>As we accumulate these predicted character arrays, we store them into another array.When the 'space' button is pressed, signalling that the word is completed, we begin the processing.</p>
+<p>As we accumulate these predicted character arrays, we store them into another array.When the 'space' button is pressed, signaling that the word is completed, we begin the processing.</p>
 
 <p><img src="https://raw.githubusercontent.com/dalderJTI/handwritingRecognition/develop/Thulika/ExampleImages/PredictionArrays.jpg" alt="Prediction Arrays"></p>
 
@@ -75,7 +80,7 @@
 <p>When a word is selected, we are provided with a possible training example. For our example, the letter sequence of our selected word should match the letters across the tops of the prediction arrays. By passing the data mapping of the input and the confirmed letter it represents back to the SOM, we can provide it the information it needs to adjust it's future predictions. This is called supervised learning. </p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/dalderJTI/handwritingRecognition">Optical Character Recognition as an Input Method</a> is maintained by <a href="https://github.com/dalderJTI">dalderJTI</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/dalderJTI/handwritingRecognition">Character Recognition and Its Uses as Input</a> is maintained by <a href="https://github.com/dalderJTI">dalderJTI</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
